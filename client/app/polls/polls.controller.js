@@ -26,13 +26,13 @@ angular.module('voteMachineApp')
 
     $scope.choosePoll = function(poll) {
       $state.go('detail', {
-        pollId: poll._id
+        pollID: poll._id
       });
     };
 
     $scope.editPoll = function(poll) {
       $state.go('edit', {
-        pollId: poll._id
+        pollID: poll._id
       });
     };
 
