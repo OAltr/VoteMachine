@@ -1,3 +1,17 @@
-<div class="col-md-12">
-This is the detail view.
+<div ng-include="'components/navbar/navbar.html'"></div>
+
+<div class="container">
+  <div class="row">
+    <div class="col-lg-8">
+      <h1>{{poll.title}}</h1>
+      <h3>{{poll.question}}</h3>
+    </div>
+    <div class="col-lg-4">
+      <br/>
+      <li class="list-group-item" ng-repeat="voteOption in poll.voteOptions">
+        <strong>{{voteOption}}</strong>
+        <span class="text-muted pull-right">{{countVotes(voteOption)}}</span>
+      </li>
+    </div>
+  </div>
 </div>
