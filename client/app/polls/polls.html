@@ -1,3 +1,16 @@
-<div class="col-md-12">
-This is the polls view.
+<div ng-include="'components/navbar/navbar.html'"></div>
+
+<div class="container">
+  <div class="row">
+    <div class="col-lg-12">
+      <h1 class="page-header">Polls:</h1>
+      <li class="list-group-item" ng-repeat="poll in allPolls">
+        <strong>{{poll.title}}</strong><br>
+        <span class="text-muted">{{poll.question}}</span>
+        <a ng-click="deletePoll(poll)" class="trash"><span class="glyphicon glyphicon-trash pull-right"></span></a>
+        <a ng-click="editPoll(poll)"><span class="glyphicon glyphicon-cog pull-right"></span></a>
+        <a ng-click="choosePoll(poll)"><span class="glyphicon glyphicon-search pull-right"></span></a>
+      </li>
+    </div>
+  </div>
 </div>
