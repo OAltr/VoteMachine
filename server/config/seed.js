@@ -3,21 +3,31 @@
  * to disable, edit config/environment/index.js, and set `seedDB: false`
  */
 
-// TODO: Update Seed-Structure, needs to be more readable
-
 'use strict';
+
+var mongoose = require('mongoose');
+var ObjectId = mongoose.Types.ObjectId;
 
 var User = require('../api/user/user.model');
 var Poll = require('../api/poll/poll.model');
 var Answer = require('../api/answer/answer.model');
 
+var testUserID = new ObjectId();
+var adminUserID = new ObjectId();
+
+var pollOneID = new ObjectId();
+var pollTwoID = new ObjectId();
+var pollThreeID = new ObjectId();
+
 User.find({}).remove(function() {
   User.create({
+    _id: testUserID,
     provider: 'local',
     name: 'Test User',
     email: 'test@test.com',
     password: 'test'
   }, {
+    _id: adminUserID,
     provider: 'local',
     role: 'admin',
     name: 'Admin',
@@ -25,41 +35,55 @@ User.find({}).remove(function() {
     password: 'admin'
   }, function() {
       console.log('finished populating users');
+  });
+});
 
-      User.findOne({name: 'Admin'}, function(err, theUser) {
-        Poll.find({}).remove(function() {
-          Poll.create({
-            title: 'Fruits',
-            question: 'This is a poll about your favourite fruit.',
-            voteOptions: ['Banana', 'Apple', 'Chocolate'],
-            owner: theUser._id
-          }, {
-            title: 'VoteMachine',
-            question: 'How would you rate this site?',
-            voteOptions: ['Perfect', 'Good', 'Okay', 'At least you tried', 'Worst site ever!!!'],
-            owner: theUser._id
-          }, {
-            title: '1+1',
-            question: 'The result of 1+1?',
-            voteOptions: ['2','11','10'],
-            owner: theUser._id
-          }, function() {
-            console.log('finished populating polls');
+Poll.find({}).remove(function() {
+  Poll.create({
+    _id: pollOneID,
+    title: 'VoteMachine',
+    question: 'How would you rate this site?',
+    voteOptions: ['Perfect', 'Good', 'Okay', 'At least you tried', 'Worst site ever!!!'],
+    owner: adminUserID
+  }, {
+    _id: pollTwoID,
+    title: 'Fruits',
+    question: 'This is a poll about your favourite fruit.',
+    voteOptions: ['Banana', 'Apple', 'Chocolate'],
+    owner: testUserID
+  }, {
+    _id: pollThreeID,
+    title: '1+1',
+    question: 'The result of 1+1?',
+    voteOptions: ['2','11','10'],
+    owner: adminUserID
+  }, function() {
+    console.log('finished populating polls');
+  });
+});
 
-            Poll.find({}, function(err, thePolls) {
-              Answer.find({}).remove(function() {
-                thePolls.map(function(aPoll) {
-                  Answer.create({
-                    answer: aPoll.voteOptions[0],
-                    voter: theUser,
-                    poll: aPoll
-                  });
-                }); // end: thePolls.map
-              }); // end: Answer.
-            });  // end: Poll.find
-          }); // end: Poll.create
-        }); // end: Poll.find.remove
-      }); // end: User.findOne
-    }
-  );
+Answer.find({}).remove(function() {
+  Answer.create({
+    answer: 'Okay',
+    voter: testUserID,
+    poll: pollOneID
+  }, {
+    answer: 'Good',
+    voter: adminUserID,
+    poll: pollOneID
+  }, {
+    answer: 'Banana',
+    voter: adminUserID,
+    poll: pollTwoID
+  }, {
+    answer: 'Orange',
+    voter: testUserID,
+    poll: pollTwoID
+  }, {
+    answer: '10',
+    voter: testUserID,
+    poll: pollThreeID
+  }, function() {
+    console.log('finished populating answers');
+  });
 });
