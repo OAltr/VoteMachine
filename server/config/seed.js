@@ -22,19 +22,27 @@ User.find({}).remove(function() {
     password: 'admin'
   }, function() {
       console.log('finished populating users');
+
+      User.findOne({name: 'Admin'}, function(err, theUser) {
+        Poll.find({}).remove(function() {
+          Poll.create({
+            title: 'Fruits',
+            question: 'This is a poll about your favourite fruit.',
+            voteOptions: ['Banana', 'Apple', 'Chocolate'],
+            owner: theUser._id
+          }, {
+            title: 'VoteMachine',
+            question: 'How would you rate this site?',
+            voteOptions: ['Perfect', 'Good', 'Okay', 'At least you tried', 'Worst site ever!!!'],
+            owner: theUser._id
+          }, {
+            title: '1+1',
+            question: 'The result of 1+1?',
+            voteOptions: ['2','11','10'],
+            owner: theUser._id
+          });
+        });
+      });
     }
   );
-});
-
-Poll.find({}).remove(function() {
-  Poll.create({
-    name : 'Fruits',
-    info : 'This is a poll about your favourite fruit.'
-  }, {
-    name : 'VoteMachine',
-    info : 'How would you rate this site?'
-  }, {
-    name : '1+1',
-    info : 'The result of 1+1?'
-  });
 });
