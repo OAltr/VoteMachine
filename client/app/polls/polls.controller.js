@@ -9,6 +9,10 @@ angular.module('voteMachineApp')
       socket.syncUpdates('poll', $scope.allPolls);
     });
 
+    $scope.pollBelongsToUser = function(poll) {
+      return poll.owner === Auth.getCurrentUser()._id;
+    };
+
     $scope.addPoll = function() {
       if($scope.newPoll === '') {
         return;

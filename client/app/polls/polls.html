@@ -7,8 +7,8 @@
       <li class="list-group-item" ng-repeat="poll in allPolls">
         <strong>{{poll.title}}</strong><br>
         <span class="text-muted">{{poll.question}}</span>
-        <a ng-click="deletePoll(poll)" class="trash"><span class="glyphicon glyphicon-trash pull-right"></span></a>
-        <a ng-click="editPoll(poll)"><span class="glyphicon glyphicon-cog pull-right"></span></a>
+        <a ng-click="deletePoll(poll)" ng-show="pollBelongsToUser(poll)" class="trash"><span class="glyphicon glyphicon-trash pull-right"></span></a>
+        <a ng-click="editPoll(poll)" ng-show="pollBelongsToUser(poll)"><span class="glyphicon glyphicon-cog pull-right"></span></a>
         <a ng-click="choosePoll(poll)"><span class="glyphicon glyphicon-search pull-right"></span></a>
       </li>
     </div>
