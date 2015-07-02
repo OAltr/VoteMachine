@@ -14,7 +14,7 @@ exports.index = function(req, res) {
 
 // Get a single poll with answers
 exports.show = function(req, res) {
-  Poll.findById(req.params.id, function (err, poll) {
+  Poll.findById(req.params.id).lean().exec(function (err, poll) {
     if(err) { return handleError(res, err); }
     if(!poll) { return res.send(404); }
 

@@ -3,10 +3,13 @@
  * to disable, edit config/environment/index.js, and set `seedDB: false`
  */
 
+// TODO: Update Seed-Structure, needs to be more readable
+
 'use strict';
 
 var User = require('../api/user/user.model');
 var Poll = require('../api/poll/poll.model');
+var Answer = require('../api/answer/answer.model');
 
 User.find({}).remove(function() {
   User.create({
@@ -40,9 +43,23 @@ User.find({}).remove(function() {
             question: 'The result of 1+1?',
             voteOptions: ['2','11','10'],
             owner: theUser._id
-          });
-        });
-      });
+          }, function() {
+            console.log('finished populating polls');
+
+            Poll.find({}, function(err, thePolls) {
+              Answer.find({}).remove(function() {
+                thePolls.map(function(aPoll) {
+                  Answer.create({
+                    answer: aPoll.voteOptions[0],
+                    voter: theUser,
+                    poll: aPoll
+                  });
+                }); // end: thePolls.map
+              }); // end: Answer.
+            });  // end: Poll.find
+          }); // end: Poll.create
+        }); // end: Poll.find.remove
+      }); // end: User.findOne
     }
   );
 });
