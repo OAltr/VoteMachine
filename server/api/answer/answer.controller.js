@@ -3,20 +3,12 @@
 var _ = require('lodash');
 var Answer = require('./answer.model');
 
-// Get list of answers
-exports.index = function(req, res) {
-  Answer.find(function (err, answers) {
-    if(err) { return handleError(res, err); }
-    return res.json(200, answers);
-  });
-};
-
-// Get a single answer
+// Get all answers for poll_id
 exports.show = function(req, res) {
-  Answer.findById(req.params.id, function (err, answer) {
+  Answer.find({poll: req.params.poll_id}, function (err, answers) {
     if(err) { return handleError(res, err); }
-    if(!answer) { return res.send(404); }
-    return res.json(answer);
+    if(!answers) { return res.send(404); }
+    return res.json(answers);
   });
 };
 

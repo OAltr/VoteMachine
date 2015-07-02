@@ -4,9 +4,9 @@ var mongoose = require('mongoose'),
     Schema = mongoose.Schema;
 
 var AnswerSchema = new Schema({
-  name: String,
-  info: String,
-  active: Boolean
+  answer: String,
+  voter: {type: Schema.ObjectId, ref: 'User'},
+  poll: {type: Schema.ObjectId, ref: 'Poll'}
 });
 
 module.exports = mongoose.model('Answer', AnswerSchema);

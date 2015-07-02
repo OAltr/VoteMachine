@@ -2,6 +2,7 @@
 
 var _ = require('lodash');
 var Poll = require('./poll.model');
+var Answer = require('../answer/answer.model');
 
 // Get list of polls
 exports.index = function(req, res) {
@@ -11,12 +12,16 @@ exports.index = function(req, res) {
   });
 };
 
-// Get a single poll
+// Get a single poll with answers
 exports.show = function(req, res) {
   Poll.findById(req.params.id, function (err, poll) {
     if(err) { return handleError(res, err); }
     if(!poll) { return res.send(404); }
-    return res.json(poll);
+
+    Answer.find({poll: poll._id}, function(err, answers) {
+      poll.answers = answers;
+      return res.json(poll);
+    });
   });
 };
 
