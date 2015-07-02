@@ -10,8 +10,17 @@ angular.module('voteMachineApp')
       answers: [{answer: 'Yes'},{answer:'No'},{answer:'Yes'}]
     };
 
+    $scope.chartLabels = $scope.poll.voteOptions;
+    $scope.chartData = [2, 1];
+
     $http.get('/api/polls/'+$state.params.pollID).success(function(thePoll) {
       $scope.poll = thePoll;
+      $scope.chartLabels = thePoll.voteOptions;
+      $scope.chartData = thePoll.voteOptions.map(function(option) {
+        return thePoll.answers.filter(function(answer) {
+          return answer.answer === option;
+        }).length;
+      });
     });
 
     $scope.pollBelongsToUser = function(poll) {
