@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('voteMachineApp')
-  .controller('MainCtrl', function ($scope, $http, socket, Auth) {
+  .controller('MainCtrl', function ($scope, $http, $state, socket, Auth) {
     $scope.isLoggedIn = Auth.isLoggedIn;
     $scope.awesomePolls = [];
 
@@ -25,8 +25,11 @@ angular.module('voteMachineApp')
       $scope.newPoll = '';
     };
 
-    $scope.deletePoll = function(poll) {
-      $http.delete('/api/polls/' + poll._id);
+
+    $scope.choosePoll = function(poll) {
+      $state.go('detail', {
+        pollId: poll._id
+      });
     };
 
     $scope.$on('$destroy', function () {
