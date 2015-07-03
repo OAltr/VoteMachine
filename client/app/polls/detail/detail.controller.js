@@ -20,9 +20,9 @@ angular.module('voteMachineApp')
 			$http.get('/api/polls/'+$state.params.pollID).success(function(thePoll) {
 				$scope.poll = thePoll;
 
-				var allAnswers = thePoll.answers.map(function(anAnswer) {
+				var allAnswers = thePoll.voteOptions.concat(thePoll.answers.map(function(anAnswer) {
 					return anAnswer.answer;
-				}).concat(thePoll.voteOptions);
+				}));
 
 				$scope.voteOptions = allAnswers.filter(function(answer, index, answers) {
 					return answers.indexOf(answer) === index;
