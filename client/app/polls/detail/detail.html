@@ -1,24 +1,24 @@
 <div ng-include="'components/navbar/navbar.html'"></div>
 
 <div class="container">
-  <div class="row">
-    <div class="col-md-8">
-      <h1>{{poll.title}}</h1>
-      <h3>{{poll.question}}</h3>
-      <br />
-    </div>
-    <div class="col-md-4">
-      <canvas class="chart chart-doughnut" data="chartData" labels="chartLabels"></canvas>
-      <br />
-    </div>
-  </div>
-  <div class="row">
-    <div class="col-lg-12">
-      <li class="list-group-item" ng-repeat="voteOption in poll.voteOptions">
-        <strong>{{voteOption}}</strong>
-        <span class="text-muted pull-right">{{countVotes(voteOption)}}</span>
-      </li>
-      <br />
-    </div>
-  </div>
+	<div class="row">
+		<div class="col-md-8">
+			<h1>{{poll.title}}</h1>
+			<h3>{{poll.question}}</h3>
+			<br />
+		</div>
+		<div class="col-md-4">
+			<canvas class="chart chart-doughnut" data="chartData" labels="chartLabels"></canvas>
+			<br />
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-lg-12">
+			<li class="list-group-item" ng-repeat="voteOption in voteOptions" ng-class="{'option-voted': userVote.answer === voteOption[0]}" ng-click="vote(voteOption[0])">
+				<strong>{{voteOption[0]}}</strong>
+				<span class="text-muted pull-right">{{voteOption[1]}}</span>
+			</li>
+			<br />
+		</div>
+	</div>
 </div>
