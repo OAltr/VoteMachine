@@ -3,6 +3,8 @@
 angular.module('voteMachineApp')
 	.controller('EditCtrl', function ($scope, $http, $state, Auth) {
 		// TODO: redirect if poll dosen't belong to user
+		var pollID = $state.params.pollID;
+
 		$scope.poll = {
 			title: '42',
 			question: 'Is this even a real question?',
@@ -13,7 +15,7 @@ angular.module('voteMachineApp')
 		$scope.editPoll = JSON.parse(JSON.stringify($scope.poll));
 		$scope.newOption = '';
 
-		$http.get('/api/polls/'+$state.params.pollID).success(function(thePoll) {
+		$http.get('/api/polls/'+pollID).success(function(thePoll) {
 			$scope.poll = thePoll;
 			$scope.editPoll = JSON.parse(JSON.stringify(thePoll));
 		});
@@ -41,9 +43,8 @@ angular.module('voteMachineApp')
 			if(poll.title === '' || poll.question === '' || poll.voteOptions.length < 2) {
 				return;
 			}
-			console.log(poll.voteOptions);
 
-			$http.patch('/api/polls/'+$state.params.pollID, {
+			$http.patch('/api/polls/'+pollID, {
 				title: poll.title,
 				question: poll.question,
 				voteOptions: poll.voteOptions
