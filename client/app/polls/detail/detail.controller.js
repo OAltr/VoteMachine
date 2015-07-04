@@ -63,7 +63,7 @@ angular.module('voteMachineApp')
 		$scope.vote = function(option) {
 			$scope.userVote.answer = option;
 			$scope.customOption = '';
-			
+
 			if($scope.userVote.hasOwnProperty('_id')) {
 				$http.patch('/api/answers/'+$scope.userVote._id, {
 					answer: option
@@ -85,6 +85,12 @@ angular.module('voteMachineApp')
 			return $scope.poll.answers.filter(function(anAnswer) {
 					return anAnswer.answer === voteOption;
 				}).length;
+		};
+
+		$scope.editPoll = function(poll) {
+			$state.go('edit', {
+				pollID: poll._id
+			});
 		};
 
 		$scope.$on('$destroy', function () {

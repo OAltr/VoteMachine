@@ -3,7 +3,8 @@
 <div class="container">
 	<div class="row">
 		<div class="col-md-8">
-			<h1>{{poll.title}}</h1>
+			<h1>{{poll.title}} <a ng-click="editPoll(poll)" ng-show="pollBelongsToUser(poll)"><span class="glyphicon glyphicon-cog"></span></a>
+</h1>
 			<h3>{{poll.question}}</h3>
 			<br />
 		</div>
