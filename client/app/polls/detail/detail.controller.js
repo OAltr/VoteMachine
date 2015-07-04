@@ -62,7 +62,8 @@ angular.module('voteMachineApp')
 
 		$scope.vote = function(option) {
 			$scope.userVote.answer = option;
-
+			$scope.customOption = '';
+			
 			if($scope.userVote.hasOwnProperty('_id')) {
 				$http.patch('/api/answers/'+$scope.userVote._id, {
 					answer: option

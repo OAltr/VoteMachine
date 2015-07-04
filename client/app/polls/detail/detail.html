@@ -19,6 +19,14 @@
 				<span class="text-muted pull-right">{{voteOption[1]}}</span>
 			</li>
 			<br />
+			<form class="poll-form">
+				<p class="input-group">
+					<input type="text" class="form-control" placeholder="Add your own answer to poll here." ng-model="customOption">
+					<span class="input-group-btn">
+						<button type="submit" class="btn btn-primary" ng-click="vote(customOption)">Vote</button>
+					</span>
+				</p>
+			</form>
 		</div>
 	</div>
 </div>
