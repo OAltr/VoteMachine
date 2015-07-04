@@ -3,6 +3,7 @@
 angular.module('voteMachineApp')
 	.controller('DetailCtrl', function ($scope, $http, $state, socket, Auth) {
 		var pollID = $state.params.pollID;
+		$scope.isLoggedIn = Auth.isLoggedIn;
 
 		$scope.poll = {
 			_id: pollID,
@@ -61,6 +62,10 @@ angular.module('voteMachineApp')
 		});
 
 		$scope.vote = function(option) {
+			if(!Auth.isLoggedIn()) {
+				return;
+			}
+
 			$scope.userVote.answer = option;
 			$scope.customOption = '';
 
