@@ -1,31 +1,39 @@
 <div ng-include="'components/navbar/navbar.html'"></div>
 
 <div class="container">
-  <div class="row">
-    <div class="col-lg-12 form-horizontal">
-      <div class="form-group">
-        <label class="col-sm-2 control-label">Title</label>
-        <div class="col-sm-10">
-          <input type="text" class="form-control" placeholder="Title" ng-model="editPoll.title">
-        </div>
-      </div>
-      <div class="form-group">
-        <label class="col-sm-2 control-label">Question</label>
-        <div class="col-sm-10">
-          <input type="text" class="form-control" placeholder="Question" ng-model="editPoll.question">
-        </div>
-      </div>
-      <br/>
-      <li class="list-group-item" ng-repeat="voteOption in editPoll.voteOptions">
-        <strong>{{voteOption}}</strong>
-        <span class="text-muted pull-right">{{countVotes(voteOption)}}</span>
-      </li>
-    </div>
-  </div>
-  <br/>
-  <center>
-    <button type="button" ng-show="pollBelongsToUser(poll)" class="btn btn-primary btn-lg" ng-click="savePoll(editPoll)">Save</button>
-    <button type="button" ng-show="pollBelongsToUser(poll)" class="btn btn-default btn-lg" ng-click="resetPoll()">Reset</button>
-    <button type="button" ng-show="pollBelongsToUser(poll)" class="btn btn-danger btn-lg" ng-click="deletePoll(editPoll)">Delete</button>
-  </center>
+	<div class="row">
+		<div class="col-lg-12 form-horizontal">
+			<div class="form-group">
+				<label class="col-sm-2 control-label">Title</label>
+				<div class="col-sm-10">
+					<input type="text" class="form-control" placeholder="Title" ng-model="editPoll.title">
+				</div>
+			</div>
+			<div class="form-group">
+				<label class="col-sm-2 control-label">Question</label>
+				<div class="col-sm-10">
+					<input type="text" class="form-control" placeholder="Question" ng-model="editPoll.question">
+				</div>
+			</div>
+			<br/>
+			<li class="list-group-item" ng-repeat="voteOption in editPoll.voteOptions">
+				<strong>{{voteOption}}</strong>
+				<a ng-click="removeVoteOption(voteOption)" class="trash"><span class="glyphicon glyphicon-trash pull-right"></span></a>
+			</li>
+			<form class="poll-form">
+				<p class="input-group">
+					<input type="text" class="form-control" placeholder="Add a new answer to poll here." ng-model="newOption">
+					<span class="input-group-btn">
+						<button type="submit" class="btn btn-primary" ng-click="addVoteOption(newOption)">Add New</button>
+					</span>
+				</p>
+			</form>
+		</div>
+	</div>
+	<br/>
+	<center ng-show="pollBelongsToUser(poll)">
+		<button type="button" class="btn btn-primary btn-lg" ng-click="savePoll(editPoll)">Save</button>
+		<button type="button" class="btn btn-default btn-lg" ng-click="resetPoll()">Reset</button>
+		<button type="button" class="btn btn-danger btn-lg" ng-click="deletePoll(editPoll)">Delete</button>
+	</center>
 </div>
