@@ -4,6 +4,7 @@ angular.module('voteMachineApp')
 	.controller('MainCtrl', function ($scope, $http, $state, socket, Auth) {
 		$scope.isLoggedIn = Auth.isLoggedIn;
 		$scope.awesomePolls = [];
+		$scope.newPoll = '';
 
 		$http.get('/api/polls').success(function(awesomePolls) {
 			$scope.awesomePolls = awesomePolls;
