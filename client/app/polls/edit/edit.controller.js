@@ -60,7 +60,9 @@ angular.module('voteMachineApp')
 
 		$scope.deletePoll = function(thePoll) {
 			var deleteModal = Modal.confirm.delete(function(poll) {
-				$http.delete('/api/polls/' + poll._id);
+				$http.delete('/api/polls/' + poll._id).success(function(poll) {
+					$state.go('polls');
+				});
 			});
 
 			deleteModal(thePoll.title, thePoll);
