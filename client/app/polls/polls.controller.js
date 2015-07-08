@@ -2,7 +2,9 @@
 
 angular.module('voteMachineApp')
   .controller('PollsCtrl', function ($scope, $http, $state, socket, Auth) {
+    $scope.isLoggedIn = Auth.isLoggedIn;
     $scope.allPolls = [];
+    $scope.newPoll = '';
 
     $http.get('/api/polls').success(function(allPolls) {
       $scope.allPolls = allPolls;
@@ -23,7 +25,11 @@ angular.module('voteMachineApp')
         question: $scope.newPoll+'?',
         voteOptions: ['Yes', 'No'],
         owner: Auth.getCurrentUser()._id
-      });
+      }).success(function(poll) {
+				$state.go('edit', {
+					pollID: poll._id
+				});
+			});
 
       $scope.newPoll = '';
     };
