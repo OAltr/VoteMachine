@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('voteMachineApp')
-	.controller('EditCtrl', function ($scope, $http, $state, Auth) {
+	.controller('EditCtrl', function ($scope, $http, $state, Auth, Modal) {
 		// TODO: redirect if poll dosen't belong to user
 		var pollID = $state.params.pollID;
 
@@ -58,8 +58,11 @@ angular.module('voteMachineApp')
 			$scope.editPoll = JSON.parse(JSON.stringify($scope.poll));
 		};
 
-		$scope.deletePoll = function(poll) {
-			$http.delete('/api/polls/' + poll._id);
-			$state.go('polls');
+		$scope.deletePoll = function(thePoll) {
+			var deleteModal = Modal.confirm.delete(function(poll) {
+				$http.delete('/api/polls/' + poll._id);
+			});
+
+			deleteModal(thePoll.title, thePoll);
 		};
 	});
