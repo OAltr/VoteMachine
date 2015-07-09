@@ -20,6 +20,18 @@ angular.module('voteMachineApp')
 				return;
 			}
 
+			var editModal = Modal.confirm.edit(function(poll) {
+				console.log('Save Poll: ' + poll);
+			});
+
+			editModal({
+				title: '42',
+				question: 'Is this even a real question?',
+				owner: '0',
+				voteOptions: ['Yes', 'No'],
+				answers: [{answer: 'Yes'},{answer:'No'},{answer:'Yes'}]
+			});
+			/*
 			$http.post('/api/polls', {
 				title: $scope.newPoll,
 				question: $scope.newPoll+'?',
@@ -30,6 +42,7 @@ angular.module('voteMachineApp')
 					pollID: poll._id
 				});
 			});
+			*/
 
 			$scope.newPoll = '';
 		};
