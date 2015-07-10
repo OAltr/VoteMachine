@@ -35,7 +35,9 @@ angular.module('voteMachineApp')
 				return;
 			}
 
-			$scope.editPoll.voteOptions.push(option);
+			if($scope.editPoll.voteOptions.indexOf(option)===-1) {
+				$scope.editPoll.voteOptions.push(option);
+			}
 			$scope.newOption = '';
 		};
 
