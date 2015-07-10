@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('voteMachineApp')
-	.controller('DetailCtrl', function ($scope, $http, $state, socket, Auth) {
+	.controller('DetailCtrl', function ($scope, $http, $state, socket, Auth, Modal) {
 		var pollID = $state.params.pollID;
 		$scope.isLoggedIn = Auth.isLoggedIn;
 
@@ -95,8 +95,9 @@ angular.module('voteMachineApp')
 		};
 
 		$scope.editPoll = function(poll) {
-			$state.go('edit', {
-				pollID: poll._id
+			$http.get('/api/polls/'+poll._id).success(function(thePoll) {
+				var editModal = Modal.confirm.edit();
+				editModal(thePoll);
 			});
 		};
 
