@@ -17,6 +17,8 @@ angular.module('voteMachineApp')
 		$scope.voteOptions = [];
 		$scope.chartLabels = [];
 		$scope.chartData = [];
+		$scope.userVote = {};
+		$scope.customOption = '';
 
 		var sortHelper = function() {
 			var thePoll = $scope.poll;
@@ -44,8 +46,6 @@ angular.module('voteMachineApp')
 
 		sortHelper();
 
-		$scope.userVote = {};
-
 		$http.get('/api/polls/'+pollID).success(function(thePoll) {
 			$scope.poll = thePoll;
 
@@ -62,7 +62,7 @@ angular.module('voteMachineApp')
 		});
 
 		$scope.vote = function(option) {
-			if(!Auth.isLoggedIn()) {
+			if(!Auth.isLoggedIn() || option === '') {
 				return;
 			}
 
@@ -78,6 +78,8 @@ angular.module('voteMachineApp')
 					answer: option,
 					voter: Auth.getCurrentUser()._id,
 					poll: $scope.poll._id
+				}).success(function(answer) {
+					$scope.userVote = answer;
 				});
 			}
 		};
