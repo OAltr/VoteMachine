@@ -27,18 +27,6 @@ angular.module('voteMachineApp')
 				voteOptions: ['Yes', 'No'],
 				owner: Auth.getCurrentUser()._id
 			});
-			/*
-			$http.post('/api/polls', {
-				title: $scope.newPoll,
-				question: $scope.newPoll+'?',
-				voteOptions: ['Yes', 'No'],
-				owner: Auth.getCurrentUser()._id
-			}).success(function(poll) {
-				$state.go('edit', {
-					pollID: poll._id
-				});
-			});
-			*/
 
 			$scope.newPoll = '';
 		};
