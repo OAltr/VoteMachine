@@ -55,9 +55,15 @@ angular.module('voteMachineApp')
 									classes: 'btn-primary',
 									text: 'Save',
 									click: function(e) {
-										$http.post('/api/polls', poll).success(function(aPoll) {
-											saveModal.close(e);
-										});
+										if(poll.hasOwnProperty('_id')) {
+											$http.patch('/api/polls/'+poll._id, poll).success(function(aPoll) {
+												saveModal.close(e);
+											});
+										} else {
+											$http.post('/api/polls', poll).success(function(aPoll) {
+												saveModal.close(e);
+											});
+										}
 									}
 								}, {
 									classes: 'btn-default',
