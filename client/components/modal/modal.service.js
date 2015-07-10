@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('voteMachineApp')
-	.factory('Modal', function ($rootScope, $modal) {
+	.factory('Modal', function ($rootScope, $modal, $http) {
 		/**
 		 * Opens a modal
 		 * @param  {Object} scope      - an object to be merged with modal's scope
@@ -29,64 +29,35 @@ angular.module('voteMachineApp')
 			confirm: {
 				/**
 				 * Create a function to open a delete confirmation modal (ex. ng-click='myModalFn(name, arg1, arg2...)')
-				 * @param  {Function} del - callback, ran when delete is confirmed
 				 * @return {Function}     - the function to open the modal (ex. myModalFn)
 				 */
-				edit: function(save) {
-					save = save || angular.noop;
-
+				edit: function() {
 					/**
 					 * Open a delete confirmation modal
-					 * @param  {String} name   - name or info to show on modal
-					 * @param  {All}           - any additional args are passed staight to del callback
+					 * @param  {Poll} poll   	 - the poll to edit with the modal
 					 */
 					return function() {
 						var args = Array.prototype.slice.call(arguments),
 								poll = args.shift() || {
 									title: '42',
 									question: 'Is this even a real question?',
-									owner: '0',
 									voteOptions: ['Yes', 'No'],
 									answers: [{answer: 'Yes'},{answer:'No'},{answer:'Yes'}]
 								},
 								saveModal;
 
-						console.log(poll);
-
-						saveModal = openModal({
+						var modalScope = $rootScope.$new();
+						var scope = {
 							modal: {
 								dismissable: true,
 								title: 'Edit',
-								html: '<div class="form-group">' +
-												'<label class="col-sm-2 control-label">Title</label>' +
-												'<div class="col-sm-10">' +
-													'<input type="text" class="form-control" placeholder="Title" ng-model="editPoll.title">' +
-												'</div>' +
-											'</div>' +
-											'<div class="form-group">' +
-												'<label class="col-sm-2 control-label">Question</label>' +
-												'<div class="col-sm-10">' +
-													'<input type="text" class="form-control" placeholder="Question" ng-model="editPoll.question">' +
-												'</div>' +
-											'</div>' +
-											'<br/>' +
-											'<li class="list-group-item" ng-repeat="voteOption in editPoll.voteOptions">' +
-												'<strong>{{voteOption}}</strong>' +
-												'<a ng-click="removeVoteOption(voteOption)" class="trash"><span class="glyphicon glyphicon-trash pull-right"></span></a>' +
-											'</li>' +
-											'<form class="poll-form">' +
-												'<p class="input-group">' +
-													'<input type="text" class="form-control" placeholder="Add a new answer to poll here." ng-model="newOption">' +
-													'<span class="input-group-btn">' +
-														'<button type="submit" class="btn btn-primary" ng-click="addVoteOption(newOption)">Add New</button>' +
-													'</span>' +
-												'</p>' +
-											'</form>',
 								buttons: [{
 									classes: 'btn-primary',
 									text: 'Save',
 									click: function(e) {
-										saveModal.close(e);
+										$http.post('/api/polls', poll).success(function(aPoll) {
+											saveModal.close(e);
+										});
 									}
 								}, {
 									classes: 'btn-default',
@@ -94,16 +65,33 @@ angular.module('voteMachineApp')
 									click: function(e) {
 										saveModal.dismiss(e);
 									}
-								}],
-								controller: function($scope) {
-									console.log('controller');
-									$scope.editPoll = poll;
+								}]
+							},
+							editPoll: poll,
+							removeVoteOption: function(option) {
+								poll.voteOptions =  poll.voteOptions.filter(function(anOption) {
+									return anOption !== option;
+								});
+							},
+							addVoteOption: function(option) {
+								if(option === '') {
+									return;
 								}
-							}
-						});
 
-						saveModal.result.then(function(event) {
-							save.apply(event, args);
+								if(poll.voteOptions.indexOf(option)===-1) {
+									poll.voteOptions.push(option);
+								}
+
+								option = '';
+							}
+						};
+
+						angular.extend(modalScope, scope);
+
+						saveModal = $modal.open({
+							templateUrl: 'components/modal/edit-modal.html',
+							windowClass: 'modal-default',
+							scope: modalScope
 						});
 					};
 				},

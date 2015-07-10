@@ -20,16 +20,12 @@ angular.module('voteMachineApp')
 				return;
 			}
 
-			var editModal = Modal.confirm.edit(function(poll) {
-				console.log('Save Poll: ' + poll);
-			});
-
+			var editModal = Modal.confirm.edit();
 			editModal({
-				title: '42',
-				question: 'Is this even a real question?',
-				owner: '0',
+				title: $scope.newPoll,
+				question: $scope.newPoll+'?',
 				voteOptions: ['Yes', 'No'],
-				answers: [{answer: 'Yes'},{answer:'No'},{answer:'Yes'}]
+				owner: Auth.getCurrentUser()._id
 			});
 			/*
 			$http.post('/api/polls', {
