@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('voteMachineApp')
-	.controller('DetailCtrl', function ($scope, $http, $state, socket, Auth) {
+	.controller('DetailCtrl', function ($scope, $http, $state, socket, Auth, Modal) {
 		var pollID = $state.params.pollID;
 		$scope.isLoggedIn = Auth.isLoggedIn;
 
@@ -46,20 +46,24 @@ angular.module('voteMachineApp')
 
 		sortHelper();
 
-		$http.get('/api/polls/'+pollID).success(function(thePoll) {
-			$scope.poll = thePoll;
+		var loadData = function() {
+			$http.get('/api/polls/'+pollID).success(function(thePoll) {
+				$scope.poll = thePoll;
 
-			sortHelper();
-
-			socket.syncUpdates('answer', $scope.poll.answers, function(event, item, array) {
-				$scope.poll.answers = array;
 				sortHelper();
-			});
 
-			$scope.userVote = thePoll.answers.filter(function(answer) {
-				return answer.voter === Auth.getCurrentUser()._id;
-			})[0] ||{};
-		});
+				socket.syncUpdates('answer', $scope.poll.answers, function(event, item, array) {
+					$scope.poll.answers = array;
+					sortHelper();
+				});
+
+				$scope.userVote = thePoll.answers.filter(function(answer) {
+					return answer.voter === Auth.getCurrentUser()._id;
+				})[0] ||{};
+			});
+		};
+
+		loadData();
 
 		$scope.vote = function(option) {
 			if(!Auth.isLoggedIn() || option === '') {
@@ -95,9 +99,22 @@ angular.module('voteMachineApp')
 		};
 
 		$scope.editPoll = function(poll) {
-			$state.go('edit', {
-				pollID: poll._id
+			$http.get('/api/polls/'+poll._id).success(function(thePoll) {
+				var editModal = Modal.confirm.edit(function() {
+					loadData();
+				});
+				editModal(thePoll);
 			});
+		};
+
+		$scope.deletePoll = function(thePoll) {
+			var deleteModal = Modal.confirm.delete(function(poll) {
+				$http.delete('/api/polls/' + poll._id).success(function() {
+					$state.go('polls');
+				});
+			});
+
+			deleteModal(thePoll.title, thePoll);
 		};
 
 		$scope.$on('$destroy', function () {

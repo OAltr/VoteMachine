@@ -6,6 +6,8 @@ angular.module('voteMachineApp')
 		$scope.allPolls = [];
 		$scope.newPoll = '';
 
+		var editModal = Modal.confirm.edit();
+
 		$http.get('/api/polls').success(function(allPolls) {
 			$scope.allPolls = allPolls;
 			socket.syncUpdates('poll', $scope.allPolls);
@@ -20,25 +22,12 @@ angular.module('voteMachineApp')
 				return;
 			}
 
-			var editModal = Modal.confirm.edit();
 			editModal({
 				title: $scope.newPoll,
 				question: $scope.newPoll+'?',
 				voteOptions: ['Yes', 'No'],
 				owner: Auth.getCurrentUser()._id
 			});
-			/*
-			$http.post('/api/polls', {
-				title: $scope.newPoll,
-				question: $scope.newPoll+'?',
-				voteOptions: ['Yes', 'No'],
-				owner: Auth.getCurrentUser()._id
-			}).success(function(poll) {
-				$state.go('edit', {
-					pollID: poll._id
-				});
-			});
-			*/
 
 			$scope.newPoll = '';
 		};
@@ -50,8 +39,8 @@ angular.module('voteMachineApp')
 		};
 
 		$scope.editPoll = function(poll) {
-			$state.go('edit', {
-				pollID: poll._id
+			$http.get('/api/polls/'+poll._id).success(function(thePoll) {
+				editModal(thePoll);
 			});
 		};
 
