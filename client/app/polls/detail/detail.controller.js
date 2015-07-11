@@ -46,20 +46,24 @@ angular.module('voteMachineApp')
 
 		sortHelper();
 
-		$http.get('/api/polls/'+pollID).success(function(thePoll) {
-			$scope.poll = thePoll;
+		var loadData = function() {
+			$http.get('/api/polls/'+pollID).success(function(thePoll) {
+				$scope.poll = thePoll;
 
-			sortHelper();
-
-			socket.syncUpdates('answer', $scope.poll.answers, function(event, item, array) {
-				$scope.poll.answers = array;
 				sortHelper();
-			});
 
-			$scope.userVote = thePoll.answers.filter(function(answer) {
-				return answer.voter === Auth.getCurrentUser()._id;
-			})[0] ||{};
-		});
+				socket.syncUpdates('answer', $scope.poll.answers, function(event, item, array) {
+					$scope.poll.answers = array;
+					sortHelper();
+				});
+
+				$scope.userVote = thePoll.answers.filter(function(answer) {
+					return answer.voter === Auth.getCurrentUser()._id;
+				})[0] ||{};
+			});
+		};
+
+		loadData();
 
 		$scope.vote = function(option) {
 			if(!Auth.isLoggedIn() || option === '') {
@@ -96,7 +100,9 @@ angular.module('voteMachineApp')
 
 		$scope.editPoll = function(poll) {
 			$http.get('/api/polls/'+poll._id).success(function(thePoll) {
-				var editModal = Modal.confirm.edit();
+				var editModal = Modal.confirm.edit(function() {
+					loadData();
+				});
 				editModal(thePoll);
 			});
 		};

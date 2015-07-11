@@ -29,9 +29,12 @@ angular.module('voteMachineApp')
 			confirm: {
 				/**
 				 * Create a function to open a delete confirmation modal (ex. ng-click='myModalFn(name, arg1, arg2...)')
+				 * @param  {Function} cb  - callback, ran when saved
 				 * @return {Function}     - the function to open the modal (ex. myModalFn)
 				 */
-				edit: function() {
+				edit: function(cb) {
+					cb = cb || angular.noop;
+
 					/**
 					 * Open a delete confirmation modal
 					 * @param  {Poll} poll   	 - the poll to edit with the modal
@@ -98,6 +101,10 @@ angular.module('voteMachineApp')
 							templateUrl: 'components/modal/edit-modal.html',
 							windowClass: 'modal-default',
 							scope: modalScope
+						});
+
+						saveModal.result.then(function(event) {
+							cb();
 						});
 					};
 				},
