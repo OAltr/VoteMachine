@@ -42,10 +42,9 @@ angular.module('voteMachineApp')
 					return function() {
 						var args = Array.prototype.slice.call(arguments),
 								poll = args.shift() || {
-									title: '42',
-									question: 'Is this even a real question?',
-									voteOptions: ['Yes', 'No'],
-									answers: [{answer: 'Yes'},{answer:'No'},{answer:'Yes'}]
+									title: '',
+									question: '',
+									voteOptions: []
 								},
 								saveModal;
 
@@ -58,6 +57,10 @@ angular.module('voteMachineApp')
 									classes: 'btn-primary',
 									text: 'Save',
 									click: function(e) {
+										if(poll.title === '' || poll.question === '' || poll.voteOptions.length === 0 || !poll.hasOwnProperty('owner')) {
+											return;
+										}
+
 										if(poll.hasOwnProperty('_id')) {
 											$http.patch('/api/polls/'+poll._id, poll).success(function(aPoll) {
 												saveModal.close(e);
