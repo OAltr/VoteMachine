@@ -7,7 +7,9 @@ angular.module('voteMachineApp')
 		$scope.newPoll = '';
 
 		$http.get('/api/polls').success(function(awesomePolls) {
-			$scope.awesomePolls = awesomePolls;
+			$scope.awesomePolls = awesomePolls.filter(function(value, index, array) {
+				return array.length - index <= 6;
+			});
 			socket.syncUpdates('poll', $scope.awesomePolls);
 		});
 
