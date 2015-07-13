@@ -6,7 +6,10 @@ angular.module('voteMachineApp')
 		$scope.allPolls = [];
 		$scope.newPoll = '';
 
-		var editModal = Modal.confirm.edit();
+		var shareModal = Modal.info.share();
+		var editModal = Modal.confirm.edit(function(pollID) {
+			shareModal('https://votemachine.herokuapp.com/polls/'+pollID);
+		});
 
 		$http.get('/api/polls').success(function(allPolls) {
 			$scope.allPolls = allPolls;

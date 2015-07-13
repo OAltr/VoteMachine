@@ -16,7 +16,10 @@ angular.module('voteMachineApp')
 				return;
 			}
 
-			var editModal = Modal.confirm.edit();
+			var shareModal = Modal.info.share();
+			var editModal = Modal.confirm.edit(function(pollID) {
+				shareModal('https://votemachine.herokuapp.com/polls/'+pollID);
+			});
 			editModal({
 				title: $scope.newPoll,
 				question: $scope.newPoll+'?',

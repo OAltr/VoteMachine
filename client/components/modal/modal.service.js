@@ -24,6 +24,40 @@ angular.module('voteMachineApp')
 
 		// Public API here
 		return {
+			/* Information modals */
+			info: {
+				/**
+				 * Create a function to open a delete confirmation modal (ex. ng-click='myModalFn(name, arg1, arg2...)')
+				 * @return {Function}     - the function to open the modal (ex. myModalFn)
+				 */
+				share: function() {
+					/**
+					 * Open a delete confirmation modal
+					 * @param  {String} link   - the link to show on modal
+					 * @param  {All}           - any additional args are passed staight to del callback
+					 */
+					return function() {
+						var args = Array.prototype.slice.call(arguments),
+								link = args.shift(),
+								shareModal;
+
+						shareModal = openModal({
+							modal: {
+								dismissable: true,
+								title: 'Share',
+								html: '<p><strong>' + link + '</strong></p><input type="text" class="form-control" placeholder="Text input" />',
+								buttons: [{
+									classes: 'btn-default',
+									text: 'Okay',
+									click: function(e) {
+										shareModal.close(e);
+									}
+								}]
+							}
+						}, 'modal-default');
+					};
+				}
+			},
 
 			/* Confirmation modals */
 			confirm: {
@@ -63,11 +97,11 @@ angular.module('voteMachineApp')
 
 										if(poll.hasOwnProperty('_id')) {
 											$http.patch('/api/polls/'+poll._id, poll).success(function(aPoll) {
-												saveModal.close(e);
+												saveModal.close();
 											});
 										} else {
 											$http.post('/api/polls', poll).success(function(aPoll) {
-												saveModal.close(e);
+												saveModal.close(aPoll._id);
 											});
 										}
 									}
@@ -106,8 +140,10 @@ angular.module('voteMachineApp')
 							scope: modalScope
 						});
 
-						saveModal.result.then(function(event) {
-							cb();
+						saveModal.result.then(function(pollID) {
+							if(pollID) {
+								cb(pollID);
+							}
 						});
 					};
 				},
