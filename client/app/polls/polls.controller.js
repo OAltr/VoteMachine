@@ -16,9 +16,15 @@ angular.module('voteMachineApp')
 			socket.syncUpdates('poll', $scope.allPolls);
 		});
 
+		$scope.justUserPolls = false;
+
 		$scope.pollBelongsToUser = function(poll) {
 			return poll.owner === Auth.getCurrentUser()._id;
 		};
+
+		$scope.showPoll = function(poll) {
+			return !$scope.justUserPolls || $scope.pollBelongsToUser(poll);
+		}
 
 		$scope.addPoll = function() {
 			if($scope.newPoll === '') {
