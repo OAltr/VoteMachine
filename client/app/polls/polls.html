@@ -4,7 +4,12 @@
 	<div class="row">
 		<div class="col-lg-12">
 			<h1 class="page-header">Polls:</h1>
-			<li class="list-group-item" ng-repeat="poll in allPolls">
+			<ul class="nav nav-pills nav-justified">
+				<li role="presentation" ng-class="{'active': !justUserPolls}" ng-click="justUserPolls = false"><a href="#">All polls</a></li>
+				<li role="presentation" ng-class="{'active':  justUserPolls}" ng-click="justUserPolls = true"><a href="#">My polls</a></li>
+			</ul>
+			<br />
+			<li class="list-group-item" ng-repeat="poll in allPolls" ng-show="showPoll(poll)">
 				<strong>{{poll.title}}</strong><br>
 				<span class="text-muted">{{poll.question}}</span>
 				<a ng-click="deletePoll(poll)" ng-show="pollBelongsToUser(poll)" class="trash"><span class="glyphicon glyphicon-trash pull-right"></span></a>
