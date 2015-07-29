@@ -4,7 +4,7 @@
 	<div class="row">
 		<div class="col-lg-12">
 			<h1 class="page-header">Polls:</h1>
-			<ul class="nav nav-pills nav-justified">
+			<ul class="nav nav-pills nav-justified" ng-show="isLoggedIn()">
 				<li role="presentation" ng-class="{'active': !justUserPolls}" ng-click="justUserPolls = false"><a href="#">All polls</a></li>
 				<li role="presentation" ng-class="{'active':  justUserPolls}" ng-click="justUserPolls = true"><a href="#">My polls</a></li>
 			</ul>
